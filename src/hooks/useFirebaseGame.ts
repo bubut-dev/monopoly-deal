@@ -51,7 +51,21 @@ export function useFirebaseGame({
       const gs = gameState as Partial<GameState>;
 
       // Defensive guard: RTDB can briefly emit incomplete snapshots during transitions.
-      if (!Array.isArray(gs.players) || typeof gs.currentPlayerIndex !== 'number' || typeof gs.turnPhase !== 'string') {
+      // Ignore partial payloads until all array fields needed by the UI are present.
+      if (
+        !Array.isArray(gs.players) ||
+        !Array.isArray(gs.drawPile) ||
+        !Array.isArray(gs.discardPile) ||
+        typeof gs.currentPlayerIndex !== 'number' ||
+        typeof gs.turnPhase !== 'string'
+      ) {
+        return;
+      }
+
+      const playersShapeValid = gs.players.every(
+        (p) => p && Array.isArray((p as any).hand) && Array.isArray((p as any).bank) && Array.isArray((p as any).properties)
+      );
+      if (!playersShapeValid) {
         return;
       }
 
