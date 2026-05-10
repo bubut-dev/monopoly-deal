@@ -5,6 +5,7 @@ import Game from '../components/Game';
 import Lobby from '../components/Lobby';
 import { useGame } from '../hooks/useGame';
 import { useFirebaseGame } from '../hooks/useFirebaseGame';
+import { ThemeId } from '../lib/themes/types';
 import {
   createRoom,
   joinRoom,
@@ -24,6 +25,7 @@ export default function Home() {
   const [playerId] = useState(() => generatePlayerId());
   const [roomData, setRoomData] = useState<RoomData | null>(null);
   const [error, setError] = useState('');
+  const [theme, setTheme] = useState<ThemeId>('classic');
 
   // Local game hook
   const localGame = useGame();
@@ -117,6 +119,11 @@ export default function Home() {
     setError('');
   }, []);
 
+  // Handle theme change
+  const handleThemeChange = useCallback((newTheme: ThemeId) => {
+    setTheme(newTheme);
+  }, []);
+
   // ============================================
   // RENDER SCREENS
   // ============================================
@@ -128,10 +135,12 @@ export default function Home() {
         <div className="flex flex-col items-center justify-center min-h-[70vh] animate-fade-in px-4">
           {/* Logo */}
           <div className="mb-8 text-center">
-            <div className="text-5xl sm:text-7xl mb-4">🃏</div>
+            <div className="text-5xl sm:text-7xl mb-4">{theme === 'bali' ? '🏝️' : '🃏'}</div>
             <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-              MONOPOLY
-              <span className="text-yellow-400 block sm:inline"> DEAL</span>
+              {theme === 'bali' ? 'BALI' : 'MONOPOLY'}
+              <span className={`block sm:inline ${theme === 'bali' ? 'text-emerald-400' : 'text-yellow-400'}`}>
+                {' '}DEAL
+              </span>
             </h1>
             <p className="text-white/40 text-sm mt-2 tracking-widest uppercase">
               Card Game
@@ -259,6 +268,8 @@ export default function Home() {
           }}
           onBackToHome={handleBackToHome}
           mode="local"
+          theme={theme}
+          onThemeChange={handleThemeChange}
         />
       </main>
     );
@@ -296,6 +307,7 @@ export default function Home() {
           isMyTurn={firebaseGame.isMyTurn}
           myPlayerIndex={firebaseGame.myPlayerIndex}
           roomCode={roomCode}
+          theme={theme}
         />
       </main>
     );

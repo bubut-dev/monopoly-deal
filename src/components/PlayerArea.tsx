@@ -3,6 +3,8 @@
 import React from 'react';
 import { PlayerState, COLOR_INFO, PropertyColor, COLOR_ORDER } from '../lib/types';
 import { calculateBankValue, getPropertySets, isSetComplete, getSetSize } from '../lib/deck';
+import { useTheme } from '../lib/themes/ThemeContext';
+import { getThemedColorLabel } from '../lib/themes';
 import CardComponent from './Card';
 
 interface PlayerAreaProps {
@@ -20,6 +22,7 @@ export default function PlayerArea({
 }: PlayerAreaProps) {
   const bankValue = calculateBankValue(player.bank);
   const propSets = getPropertySets(player.properties);
+  const { theme } = useTheme();
 
   // Count complete sets
   let completeSets = 0;
@@ -105,6 +108,7 @@ export default function PlayerArea({
               if (!cards || cards.length === 0) return null;
               const complete = isSetComplete(color, cards);
               const info = COLOR_INFO[color];
+              const themedLabel = getThemedColorLabel(color, theme);
 
               return (
                 <div
@@ -118,7 +122,7 @@ export default function PlayerArea({
                   `}
                 >
                   <div className="text-[8px] text-white/50 font-medium">
-                    {info.label} ({cards.length}/{getSetSize(color)})
+                    {themedLabel} ({cards.length}/{getSetSize(color)})
                   </div>
                   <div className="flex gap-0.5">
                     {cards.map((card) => (

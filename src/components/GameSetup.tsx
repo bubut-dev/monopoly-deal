@@ -1,28 +1,68 @@
 'use client';
 
 import React, { useState } from 'react';
+import { ThemeId } from '../lib/themes/types';
+import { themeList } from '../lib/themes';
 
 interface GameSetupProps {
   onStart: (playerCount: number) => void;
   mode?: 'local' | 'online';
+  theme?: ThemeId;
+  onThemeChange?: (theme: ThemeId) => void;
 }
 
-export default function GameSetup({ onStart, mode = 'local' }: GameSetupProps) {
+export default function GameSetup({ onStart, mode = 'local', theme = 'classic', onThemeChange }: GameSetupProps) {
   const [playerCount, setPlayerCount] = useState(2);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] animate-fade-in">
       {/* Logo */}
       <div className="mb-8 text-center">
-        <div className="text-5xl sm:text-7xl mb-4">🃏</div>
+        <div className="text-5xl sm:text-7xl mb-4">
+          {theme === 'bali' ? '🏝️' : '🃏'}
+        </div>
         <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-          MONOPOLY
-          <span className="text-yellow-400 block sm:inline"> DEAL</span>
+          {theme === 'bali' ? 'BALI' : 'MONOPOLY'}
+          <span className={`block sm:inline ${theme === 'bali' ? 'text-emerald-400' : 'text-yellow-400'}`}>
+            {theme === 'bali' ? ' DEAL' : ' DEAL'}
+          </span>
         </h1>
         <p className="text-white/40 text-sm mt-2 tracking-widest uppercase">
           {mode === 'online' ? 'Online Multiplayer' : 'Card Game'}
         </p>
       </div>
+
+      {/* Theme Selector */}
+      {onThemeChange && (
+        <div className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-4 sm:p-5 mb-4 max-w-sm w-full">
+          <h2 className="text-white/80 text-sm font-semibold uppercase tracking-wider mb-3 text-center">
+            Choose Theme
+          </h2>
+          <div className="flex gap-3 justify-center">
+            {themeList.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => onThemeChange(t.id as ThemeId)}
+                className={`
+                  flex flex-col items-center gap-1.5 px-4 py-3 rounded-xl border-2 transition-all duration-200
+                  ${theme === t.id
+                    ? 'border-yellow-400 bg-yellow-400/10 shadow-lg shadow-yellow-400/20 scale-105'
+                    : 'border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20'
+                  }
+                `}
+              >
+                <span className="text-2xl sm:text-3xl">{t.emoji}</span>
+                <span className={`text-xs font-bold ${theme === t.id ? 'text-yellow-300' : 'text-white/60'}`}>
+                  {t.name}
+                </span>
+                <span className="text-[9px] text-white/30 leading-tight text-center max-w-[80px]">
+                  {t.subtitle}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Player count selector */}
       <div className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8 mb-8 max-w-sm w-full">

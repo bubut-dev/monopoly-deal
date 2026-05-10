@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Card as CardType, COLOR_INFO, PropertyColor } from '../lib/types';
+import { useTheme } from '../lib/themes/ThemeContext';
+import { getThemedCardDisplay, getThemedColorLabel } from '../lib/themes';
 
 interface CardProps {
   card: CardType;
@@ -46,16 +48,6 @@ function getCardStyle(card: CardType): string {
   }
 }
 
-function getCategoryIcon(category: string): string {
-  switch (category) {
-    case 'money': return '💰';
-    case 'property': return '🏠';
-    case 'rent': return '收取';
-    case 'action': return '⚡';
-    default: return '🃏';
-  }
-}
-
 function getCategoryBadge(category: string): string {
   switch (category) {
     case 'money': return 'bg-emerald-500/30 text-emerald-200';
@@ -74,6 +66,8 @@ export default function Card({
   small = false,
   highlight = false,
 }: CardProps) {
+  const { theme } = useTheme();
+
   if (faceDown) {
     return (
       <div
@@ -85,14 +79,15 @@ export default function Card({
         `}
       >
         <div className="text-center">
-          <div className={`${small ? 'text-lg' : 'text-2xl'}`}>🃏</div>
-          {!small && <div className="text-[8px] text-blue-300/50 mt-1">MONOPOLY</div>}
+          <div className={`${small ? 'text-lg' : 'text-2xl'}`}>{theme.emoji}</div>
+          {!small && <div className="text-[8px] text-blue-300/50 mt-1">{theme.cardBackLabel}</div>}
         </div>
       </div>
     );
   }
 
   const gradient = getCardStyle(card);
+  const themed = getThemedCardDisplay(card, theme);
 
   return (
     <button
@@ -115,52 +110,53 @@ export default function Card({
 
       {/* Main content */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-0.5">
-        {/* Card name / label */}
+        {/* Card name / label (themed) */}
         <div className={`${small ? 'text-[7px]' : 'text-[10px] sm:text-xs'} font-bold text-white leading-tight whitespace-pre-line drop-shadow-md`}>
-          {card.label || card.name}
+          {themed.label}
         </div>
 
-        {/* Value display */}
-        {card.value > 0 && (
+        {/* Value display (themed currency) */}
+        {themed.valueDisplay && (
           <div className={`${small ? 'text-sm' : 'text-lg sm:text-xl'} font-black text-white drop-shadow-lg`}>
-            ${card.value}M
+            {themed.valueDisplay}
           </div>
         )}
 
-        {/* Action icon */}
-        {card.category === 'action' && !card.value && (
+        {/* Action icon (themed) */}
+        {card.category === 'action' && !card.value && themed.icon && (
           <div className={`${small ? 'text-sm' : 'text-xl'} drop-shadow-lg`}>
-            {card.actionType === 'dealbreaker' && '💥'}
-            {card.actionType === 'passgo' && '🚶'}
-            {card.actionType === 'forceddeal' && '🔄'}
-            {card.actionType === 'slydeal' && '🤏'}
-            {card.actionType === 'debtcollector' && '🏦'}
-            {card.actionType === 'itsmybirthday' && '🎂'}
-            {card.actionType === 'doubletherent' && '✖️'}
-            {card.actionType === 'house' && '🏘️'}
-            {card.actionType === 'hotel' && '🏨'}
-            {card.actionType === 'justsayno' && '🛑'}
+            {themed.icon}
           </div>
         )}
 
-        {/* Rent icon */}
+        {/* Rent icon (themed) */}
         {card.category === 'rent' && (
           <div className={`${small ? 'text-sm' : 'text-xl'} drop-shadow-lg`}>
-            💸
+            {themed.icon}
           </div>
         )}
 
-        {/* Property icon for standard properties */}
+        {/* Property icon for standard properties (themed) */}
         {card.category === 'property' && card.colors.length === 1 && card.colors[0] !== 'multicolor' && (
           <div className={`${small ? 'text-sm' : 'text-xl'} drop-shadow-lg`}>
-            {card.colors[0] === 'railroad' ? '🚂' : card.colors[0] === 'utility' ? '⚡' : '🏠'}
+            {themed.icon}
           </div>
         )}
 
-        {/* Wildcard indicator */}
+        {/* Wildcard indicator (themed labels) */}
         {card.category === 'property' && (card.colors.length > 1) && (
           <div className={`${small ? 'text-[6px]' : 'text-[8px] sm:text-[10px]'} text-white/80 leading-tight`}>
-            {card.colors.length > 2 ? 'ANY' : card.colors.map(c => COLOR_INFO[c]?.label || c).join('/')}
+            {card.colors.length > 2
+              ? (theme.id === 'bali' ? 'Bali Visa' : 'ANY')
+              : card.colors.map(c => getThemedColorLabel(c, theme)).join('/')
+            }
+          </div>
+        )}
+
+        {/* Description (themed, shown for action cards and larger cards) */}
+        {!small && themed.description && card.category === 'action' && (
+          <div className="text-[6px] sm:text-[7px] text-white/60 leading-tight mt-0.5 max-w-[90%]">
+            {themed.description}
           </div>
         )}
       </div>
