@@ -20,7 +20,12 @@ interface GameProps {
     chosenColor?: PropertyColor;
   }) => void;
   onEndTurn: () => void;
-  onStartGame: (playerCount: number) => void;
+  onStartGame: (playerCount: number, playerNames?: string[]) => void;
+  onBackToHome?: () => void;
+  mode?: 'local' | 'online';
+  isMyTurn?: boolean;
+  myPlayerIndex?: number;
+  roomCode?: string;
 }
 
 export default function Game({
@@ -29,6 +34,11 @@ export default function Game({
   onPlayCard,
   onEndTurn,
   onStartGame,
+  onBackToHome,
+  mode = 'local',
+  isMyTurn = true,
+  myPlayerIndex = 0,
+  roomCode,
 }: GameProps) {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [wildcardDialog, setWildcardDialog] = useState<{ cardId: string; open: boolean }>({
@@ -38,73 +48,131 @@ export default function Game({
 
   // Setup screen
   if (state.turnPhase === 'setup') {
-    return <GameSetup onStart={onStartGame} />;
+    return (
+      <div>
+        {onBackToHome && (
+          <div className="absolute top-4 left-4 z-50">
+            <button
+              onClick={onBackToHome}
+              className="px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur-sm text-white/60 hover:text-white hover:bg-black/60 border border-white/10 transition-all text-sm"
+            >
+              ← Back
+            </button>
+          </div>
+        )}
+        <GameSetup onStart={(count) => onStartGame(count)} mode={mode} />
+      </div>
+    );
   }
 
   // Game over screen
   if (state.turnPhase === 'gameover' && state.winner !== null) {
     const winner = state.players[state.winner];
     return (
-      <GameOver
-        winnerName={winner.name}
-        onPlayAgain={() => onStartGame(state.players.length)}
-        turnCount={state.turnCount}
-      />
+      <div>
+        {onBackToHome && (
+          <div className="absolute top-4 left-4 z-50">
+            <button
+              onClick={onBackToHome}
+              className="px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur-sm text-white/60 hover:text-white hover:bg-black/60 border border-white/10 transition-all text-sm"
+            >
+              ← Back
+            </button>
+          </div>
+        )}
+        <GameOver
+          winnerName={winner.name}
+          onPlayAgain={() => onStartGame(state.players.length)}
+          turnCount={state.turnCount}
+        />
+      </div>
     );
   }
 
+  // Determine the "viewing player" index
+  const viewingPlayerIndex = mode === 'online' ? myPlayerIndex : state.currentPlayerIndex;
+  const viewingPlayer = state.players[viewingPlayerIndex];
   const currentPlayer = state.players[state.currentPlayerIndex];
+
   const isDrawPhase = state.turnPhase === 'draw';
   const isPlayPhase = state.turnPhase === 'play';
-  const canPlay = isPlayPhase && state.cardsPlayedThisTurn < 3;
-  const handOverLimit = currentPlayer.hand.length > 7;
+  const canAct = mode === 'online' ? (isMyTurn && (isDrawPhase || isPlayPhase)) : true;
+  const canPlayCards = isPlayPhase && state.cardsPlayedThisTurn < 3 && canAct;
+  const handOverLimit = viewingPlayer.hand.length > 7;
   const mustDiscard = handOverLimit && isPlayPhase;
 
   function handleCardClick(cardInstanceId: string) {
-    if (!canPlay && !mustDiscard) return;
+    if (!canPlayCards && !mustDiscard) return;
 
-    const card = currentPlayer.hand.find((c) => c.instanceId === cardInstanceId);
+    const card = viewingPlayer.hand.find((c) => c.instanceId === cardInstanceId);
     if (!card) return;
 
-    // If hand is over 7 and card has no value, discard it
     if (mustDiscard) {
-      // For simplicity, clicking a card when over limit discards it
-      // In a full implementation we'd have a discard mode
       return;
     }
 
-    if (!canPlay) return;
-
-    // Check if this is a wildcard that needs color selection
-    if (
-      card.category === 'property' &&
-      card.colors.length > 1 &&
-      !card.colors.includes('multicolor') === false
-    ) {
-      // For V1, auto-pick first color
-    }
+    if (!canPlayCards) return;
 
     onPlayCard(cardInstanceId);
     setSelectedCardId(null);
   }
 
-  // Get opponents (players other than current)
+  // Get opponents (players other than the viewing player)
   const opponents = state.players.filter(
-    (p) => p.id !== state.currentPlayerIndex
+    (p) => p.id !== viewingPlayerIndex
   );
 
-  // Layout based on player count
+  // Layout based on opponent count
   const topOpponents = opponents.slice(0, Math.ceil(opponents.length / 2));
   const sideOpponents = opponents.slice(Math.ceil(opponents.length / 2));
 
+  // In online mode, determine who can see whose hand
+  const isMyTurnIndicator = mode === 'online' ? isMyTurn : true;
+
   return (
-    <div className="flex flex-col h-full max-h-screen overflow-hidden">
+    <div className="flex flex-col h-full max-h-screen overflow-hidden relative">
+      {/* Top bar */}
+      <div className="absolute top-2 left-2 z-50 flex items-center gap-2">
+        {onBackToHome && (
+          <button
+            onClick={onBackToHome}
+            className="px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur-sm text-white/60 hover:text-white hover:bg-black/60 border border-white/10 transition-all text-xs"
+          >
+            ← Leave
+          </button>
+        )}
+        {mode === 'online' && roomCode && (
+          <div className="px-2 py-1 rounded-lg bg-black/40 backdrop-blur-sm text-white/40 text-xs font-mono border border-white/5">
+            Room: {roomCode}
+          </div>
+        )}
+      </div>
+
+      {/* Online turn indicator */}
+      {mode === 'online' && (
+        <div className="absolute top-2 right-2 z-50">
+          <div className={`
+            px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur-sm border
+            ${isMyTurn
+              ? 'bg-green-500/20 text-green-300 border-green-500/30 animate-pulse'
+              : 'bg-white/5 text-white/40 border-white/5'
+            }
+          `}>
+            {isMyTurn ? '🎯 Your Turn!' : `⏳ ${currentPlayer?.name}'s turn`}
+          </div>
+        </div>
+      )}
+
       {/* Top opponents */}
-      <div className={`flex-shrink-0 ${topOpponents.length > 0 ? 'p-2' : ''}`}>
+      <div className={`flex-shrink-0 ${topOpponents.length > 0 ? 'p-2 pt-8' : 'pt-8'}`}>
         <div className="flex gap-2 justify-center flex-wrap">
           {topOpponents.map((opp) => (
             <div key={opp.id} className="flex-1 max-w-sm min-w-[200px]">
-              <PlayerArea player={opp} isCurrentPlayer={false} showDetails />
+              <PlayerArea
+                player={opp}
+                isCurrentPlayer={opp.id === state.currentPlayerIndex}
+                showDetails
+              />
             </div>
           ))}
         </div>
@@ -133,9 +201,9 @@ export default function Game({
           drawPileCount={state.drawPile.length}
           discardPileCount={state.discardPile.length}
           onDrawClick={() => {
-            if (isDrawPhase) onDrawCards(2);
+            if (isDrawPhase && canAct) onDrawCards(2);
           }}
-          canDraw={isDrawPhase}
+          canDraw={isDrawPhase && canAct}
         />
       </div>
 
@@ -145,7 +213,11 @@ export default function Game({
           <div className="flex gap-2 justify-center flex-wrap">
             {sideOpponents.map((opp) => (
               <div key={opp.id} className="flex-1 max-w-sm min-w-[200px]">
-                <PlayerArea player={opp} isCurrentPlayer={false} showDetails />
+                <PlayerArea
+                  player={opp}
+                  isCurrentPlayer={opp.id === state.currentPlayerIndex}
+                  showDetails
+                />
               </div>
             ))}
           </div>
@@ -166,12 +238,17 @@ export default function Game({
         </div>
       )}
 
-      {/* Current player area */}
-      <div className="flex-shrink-0 border-t border-white/10 bg-black/30 backdrop-blur-sm">
-        {/* Current player info */}
+      {/* Current viewing player area */}
+      <div className={`flex-shrink-0 border-t backdrop-blur-sm
+        ${mode === 'online' && isMyTurn
+          ? 'border-yellow-400/30 bg-black/30'
+          : 'border-white/10 bg-black/30'
+        }
+      `}>
+        {/* Viewing player info */}
         <PlayerArea
-          player={currentPlayer}
-          isCurrentPlayer={true}
+          player={viewingPlayer}
+          isCurrentPlayer={viewingPlayerIndex === state.currentPlayerIndex}
           showDetails
         />
 
@@ -182,7 +259,7 @@ export default function Game({
 
         {/* Turn controls */}
         <div className="flex items-center justify-center gap-3 px-4 py-1.5">
-          {isDrawPhase && (
+          {isDrawPhase && canAct && (
             <button
               onClick={() => onDrawCards(2)}
               className="px-4 py-1.5 rounded-lg font-semibold text-sm
@@ -194,7 +271,13 @@ export default function Game({
             </button>
           )}
 
-          {isPlayPhase && (
+          {!canAct && mode === 'online' && (
+            <span className="text-xs text-white/30 animate-pulse">
+              Waiting for {currentPlayer?.name}...
+            </span>
+          )}
+
+          {isPlayPhase && canAct && (
             <>
               <span className="text-xs text-white/40">
                 Plays: {state.cardsPlayedThisTurn}/3
@@ -219,17 +302,17 @@ export default function Game({
           )}
         </div>
 
-        {/* Current player hand */}
+        {/* Viewing player hand */}
         <div className="pb-3 pt-1 px-2">
           <div className="text-[10px] text-white/30 uppercase tracking-wider mb-1 text-center">
-            Your Hand ({currentPlayer.hand.length} cards)
+            {mode === 'online' ? 'Your Hand' : `${viewingPlayer.name}'s Hand`} ({viewingPlayer.hand.length} cards)
           </div>
           <PlayerHand
-            cards={currentPlayer.hand}
-            isCurrentPlayer={true}
+            cards={viewingPlayer.hand}
+            isCurrentPlayer={canAct}
             onCardClick={handleCardClick}
             selectedCardId={selectedCardId}
-            canPlay={canPlay}
+            canPlay={canPlayCards}
           />
         </div>
       </div>

@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 
 interface GameSetupProps {
   onStart: (playerCount: number) => void;
+  mode?: 'local' | 'online';
 }
 
-export default function GameSetup({ onStart }: GameSetupProps) {
+export default function GameSetup({ onStart, mode = 'local' }: GameSetupProps) {
   const [playerCount, setPlayerCount] = useState(2);
 
   return (
@@ -19,7 +20,7 @@ export default function GameSetup({ onStart }: GameSetupProps) {
           <span className="text-yellow-400 block sm:inline"> DEAL</span>
         </h1>
         <p className="text-white/40 text-sm mt-2 tracking-widest uppercase">
-          Card Game
+          {mode === 'online' ? 'Online Multiplayer' : 'Card Game'}
         </p>
       </div>
 
@@ -64,7 +65,9 @@ export default function GameSetup({ onStart }: GameSetupProps) {
       <div className="text-center text-white/30 text-xs max-w-xs space-y-1">
         <p>Draw 2 cards per turn • Play up to 3 cards</p>
         <p>First to complete 3 property sets wins!</p>
-        <p className="mt-2 text-white/20">V1 — Local hot-seat multiplayer</p>
+        <p className="mt-2 text-white/20">
+          {mode === 'online' ? '🌐 Online Multiplayer' : '🎮 Local hot-seat multiplayer'}
+        </p>
       </div>
     </div>
   );
