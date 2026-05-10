@@ -119,7 +119,8 @@ export default function Home() {
     }
 
     const playerNames = connectedPlayers.map(([, p]) => p.name);
-    firebaseGame.startGame(playerNames.length, playerNames);
+    const playerClientIds = connectedPlayers.map(([id]) => id);
+    firebaseGame.startGame(playerNames.length, playerNames, playerClientIds);
   }, [roomData, playerId, firebaseGame]);
 
   // Handle leave room

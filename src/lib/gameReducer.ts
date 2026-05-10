@@ -113,6 +113,7 @@ export const initialState: GameState = {
   players: [],
   drawPile: [],
   discardPile: [],
+  playerClientIds: [],
   currentPlayerIndex: 0,
   turnPhase: 'setup',
   cardsDrawnThisTurn: 0,

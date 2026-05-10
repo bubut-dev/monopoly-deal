@@ -72,7 +72,16 @@ export function useFirebaseGame({
       const safeState = gs as GameState;
       setState(safeState);
 
-      // Find our player index
+      // Find our player index using stable room player IDs first (authoritative).
+      if (Array.isArray(safeState.playerClientIds) && safeState.playerClientIds.length > 0) {
+        const mappedIdx = safeState.playerClientIds.indexOf(playerId);
+        if (mappedIdx >= 0) {
+          localPlayerIndex.current = mappedIdx;
+          return;
+        }
+      }
+
+      // Fallback for legacy states without playerClientIds.
       const idx = safeState.players.findIndex(
         (p) => p.name === playerName || p.id.toString() === playerId
       );
@@ -114,7 +123,7 @@ export function useFirebaseGame({
   const isMyTurn = state.currentPlayerIndex === localPlayerIndex.current;
 
   const startGame = useCallback(
-    (playerCount: number, playerNames?: string[]) => {
+    (playerCount: number, playerNames?: string[], playerClientIds?: string[]) => {
       if (isWritingRef.current) return;
 
       isWritingRef.current = true;
@@ -131,12 +140,20 @@ export function useFirebaseGame({
           name: playerNames?.[i] || `Player ${i + 1}`,
         }));
 
-        const newState = { ...startState, players: playersWithNames };
+        const newState = {
+          ...startState,
+          players: playersWithNames,
+          playerClientIds: playerClientIds ?? [],
+        };
 
         // Find our index
-        const idx = newState.players.findIndex(
-          (p) => p.name === playerName
-        );
+        let idx = -1;
+        if (Array.isArray(playerClientIds) && playerClientIds.length > 0) {
+          idx = playerClientIds.indexOf(playerId);
+        }
+        if (idx < 0) {
+          idx = newState.players.findIndex((p) => p.name === playerName);
+        }
         if (idx >= 0) {
           localPlayerIndex.current = idx;
         }

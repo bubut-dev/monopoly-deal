@@ -81,6 +81,8 @@ export interface GameState {
   players: PlayerState[];
   drawPile: Card[];
   discardPile: Card[];
+  // playerId (room participant id) mapped by game player index
+  playerClientIds?: string[];
   currentPlayerIndex: number;
   turnPhase: TurnPhase;
   cardsDrawnThisTurn: number;

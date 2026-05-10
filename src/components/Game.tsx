@@ -22,7 +22,7 @@ interface GameProps {
     chosenColor?: PropertyColor;
   }) => void;
   onEndTurn: () => void;
-  onStartGame: (playerCount: number, playerNames?: string[]) => void;
+  onStartGame: (playerCount: number, playerNames?: string[], playerClientIds?: string[]) => void;
   onBackToHome?: () => void;
   mode?: 'local' | 'online';
   isMyTurn?: boolean;
@@ -52,8 +52,18 @@ export default function Game({
     open: false,
   });
 
-  // Setup screen
+  // Setup screen (local only). In online mode, setup is handled by lobby host start.
   if (state.turnPhase === 'setup') {
+    if (mode === 'online') {
+      return (
+        <ThemeProvider themeId={theme}>
+          <div className="min-h-screen flex items-center justify-center text-white/60 text-sm">
+            Waiting for host to start the game...
+          </div>
+        </ThemeProvider>
+      );
+    }
+
     return (
       <ThemeProvider themeId={theme}>
         <div>
