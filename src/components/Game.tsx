@@ -104,10 +104,21 @@ export default function Game({
     );
   }
 
+  // Defensive guard: avoid crashing if state is temporarily incomplete during online sync
+  if (!Array.isArray(state.players) || state.players.length === 0) {
+    return (
+      <ThemeProvider themeId={theme}>
+        <div className="min-h-screen flex items-center justify-center text-white/60 text-sm">
+          Syncing game state...
+        </div>
+      </ThemeProvider>
+    );
+  }
+
   // Determine the "viewing player" index
   const viewingPlayerIndex = mode === 'online' ? myPlayerIndex : state.currentPlayerIndex;
-  const viewingPlayer = state.players[viewingPlayerIndex];
-  const currentPlayer = state.players[state.currentPlayerIndex];
+  const viewingPlayer = state.players[viewingPlayerIndex] || state.players[0];
+  const currentPlayer = state.players[state.currentPlayerIndex] || state.players[0];
 
   const isDrawPhase = state.turnPhase === 'draw';
   const isPlayPhase = state.turnPhase === 'play';

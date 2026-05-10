@@ -46,17 +46,24 @@ export function useFirebaseGame({
     markConnected(roomCode, playerId);
 
     const unsubscribe = onGameStateChange(roomCode, (gameState) => {
-      if (gameState) {
-        const gs = gameState as GameState;
-        setState(gs);
+      if (!gameState) return;
 
-        // Find our player index
-        const idx = gs.players.findIndex(
-          (p) => p.name === playerName || p.id.toString() === playerId
-        );
-        if (idx >= 0) {
-          localPlayerIndex.current = idx;
-        }
+      const gs = gameState as Partial<GameState>;
+
+      // Defensive guard: RTDB can briefly emit incomplete snapshots during transitions.
+      if (!Array.isArray(gs.players) || typeof gs.currentPlayerIndex !== 'number' || typeof gs.turnPhase !== 'string') {
+        return;
+      }
+
+      const safeState = gs as GameState;
+      setState(safeState);
+
+      // Find our player index
+      const idx = safeState.players.findIndex(
+        (p) => p.name === playerName || p.id.toString() === playerId
+      );
+      if (idx >= 0) {
+        localPlayerIndex.current = idx;
       }
     });
 
