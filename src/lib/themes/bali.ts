@@ -12,6 +12,18 @@ export const baliTheme: Theme = {
     railroad: 'Clubs',
     utility: 'Sports',
   },
+  regionLabels: {
+    brown: 'BALI',
+    lightblue: 'DENPASAR',
+    pink: 'SIDEMEN',
+    orange: 'UBUD',
+    red: 'CANGGU',
+    yellow: 'PERERENAN',
+    green: 'SEMINYAK',
+    darkblue: 'ULUWATU',
+    railroad: 'CLUBS',
+    utility: 'SPORTS',
+  },
   propertyIcon: '🌴',
   propertyIcons: {
     brown: '🍚',
@@ -52,36 +64,6 @@ export const baliTheme: Theme = {
     'a-house': { label: 'Villa', description: 'Villa — Add to a complete set: +Rp3M rent' },
     'a-hotel': { label: 'Resort', description: 'Resort — Add to set with villa: +Rp4M more rent' },
 
-    // === PROPERTY CARDS - Brown (Cheapest) ===
-    'p-brown': { name: 'Bali Property', label: 'Bali', description: 'Property' },
-
-    // === PROPERTY CARDS - Light Blue ===
-    'p-lb': { name: 'Denpasar Property', label: 'Denpasar', description: 'Property' },
-
-    // === PROPERTY CARDS - Pink ===
-    'p-pink': { name: 'Sidemen Property', label: 'Sidemen', description: 'Property' },
-
-    // === PROPERTY CARDS - Orange ===
-    'p-ora': { name: 'Ubud Property', label: 'Ubud', description: 'Property' },
-
-    // === PROPERTY CARDS - Red ===
-    'p-red': { name: 'Canggu Property', label: 'Canggu', description: 'Property' },
-
-    // === PROPERTY CARDS - Yellow ===
-    'p-yel': { name: 'Pererenan Property', label: 'Pererenan', description: 'Property' },
-
-    // === PROPERTY CARDS - Green ===
-    'p-grn': { name: 'Seminyak Property', label: 'Seminyak', description: 'Property' },
-
-    // === PROPERTY CARDS - Dark Blue ===
-    'p-db': { name: 'Uluwatu Property', label: 'Uluwatu', description: 'Property' },
-
-    // === PROPERTY CARDS - Railroad (Clubs) ===
-    'p-rr': { name: 'Beach Club', label: 'Club', description: 'Property' },
-
-    // === PROPERTY CARDS - Utility (Sports) ===
-    'p-util': { name: 'Sport', label: 'Sport', description: 'Property' },
-
     // === WILDCARD CARDS ===
     'w-blb': { name: 'Warung & Market', label: 'W&M', description: 'Warung & Market Combo' },
     'w-lbp': { name: 'Market & Temple', label: 'M&T', description: 'Market & Temple Run' },
@@ -107,6 +89,55 @@ export const baliTheme: Theme = {
     'r-rru': { label: 'Club &\nSport', description: 'Club & Sport Rent' },
     'r-rru2': { label: 'Club &\nSport', description: 'Club & Sport Rent' },
     'r-wild': { label: 'Island\nRent', description: 'Island-Wide Rent' },
+  },
+  cardNames: {
+    // === Brown (Bali - Cheapest) ===
+    'Mediterranean Ave': { label: 'Warung Babi\nGuling', subtitle: 'Balinese Grandma' },
+    'Baltic Ave': { label: 'Tegallalang\nRice Terrace', subtitle: 'Farmer Made' },
+
+    // === Light Blue (Denpasar Budget) ===
+    'Oriental Ave': { label: 'Pasar\nBadung', subtitle: 'Local' },
+    'Vermont Ave': { label: 'Scooter\nRental', subtitle: 'Backpacker' },
+    'Connecticut Ave': { label: 'Cheap\nHomestay', subtitle: 'Gap Year Kid' },
+
+    // === Pink (Sidemen Hippie) ===
+    'St. Charles Place': { label: 'Sunset\nSpot', subtitle: 'Hippie' },
+    'States Ave': { label: 'Temple\nGate', subtitle: 'Temple Tourist' },
+    'Virginia Ave': { label: 'Coffee\nPlantation', subtitle: 'Coffee Snob' },
+
+    // === Orange (Ubud Spiritual) ===
+    'St. James Place': { label: 'Yoga\nStudio', subtitle: 'Yoga Girl' },
+    'Tennessee Ave': { label: 'Monkey\nForest', subtitle: 'Tourist w/ Banana' },
+    'New York Ave': { label: 'Organic\nCafé', subtitle: 'Smoothie Bowl Person' },
+
+    // === Red (Canggu Nomad) ===
+    'Kentucky Ave': { label: 'Dojo\nCo-Working', subtitle: 'Digital Nomad' },
+    'Indiana Ave': { label: 'Echo\nBeach', subtitle: 'Surfer Dude' },
+    'Illinois Ave': { label: 'Crypto\nExchange', subtitle: 'Crypto Bro' },
+
+    // === Yellow (Pererenan Trendy) ===
+    'Atlantic Ave': { label: 'Beach\nClub', subtitle: 'Instagram Model' },
+    'Ventnor Ave': { label: 'Infinity\nPool', subtitle: 'Influencer' },
+    'Marvin Gardens': { label: 'Matcha\nCafé', subtitle: 'Wellness Bro' },
+
+    // === Green (Seminyak Party) ===
+    'Pacific Ave': { label: 'Potato\nHead', subtitle: 'Party Animal' },
+    'North Carolina Ave': { label: 'Motel\nMexicola', subtitle: 'Tequila Girl' },
+    'Pennsylvania Ave': { label: 'Ku De Ta', subtitle: 'Fancy Tourist' },
+
+    // === Dark Blue (Uluwatu Luxury) ===
+    'Park Place': { label: 'Single\nFin', subtitle: 'Pro Surfer' },
+    'Boardwalk': { label: 'Bulgari\nResort', subtitle: 'Russian Billionaire' },
+
+    // === Railroad → Clubs ===
+    'Reading Railroad': { label: 'Finns\nBeach Club', subtitle: '' },
+    'Pennsylvania Railroad': { label: 'Savaya', subtitle: '' },
+    'B&O Railroad': { label: 'Shishi', subtitle: '' },
+    'Short Line': { label: 'Atlas\nBeach Fest', subtitle: '' },
+
+    // === Utility → Sports ===
+    'Electric Company': { label: 'Surfing', subtitle: '' },
+    'Water Works': { label: 'Yoga', subtitle: '' },
   },
   moneyLabel: (value: number) => `Rp${value}M`,
   wildcardLabel: (colors: PropertyColor[]) => {

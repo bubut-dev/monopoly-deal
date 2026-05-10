@@ -146,7 +146,7 @@ export default function Game({
 
   return (
     <ThemeProvider themeId={theme}>
-      <div className="flex flex-col h-full max-h-screen overflow-hidden relative">
+      <div className="flex flex-col min-h-screen relative">
         {/* Top bar */}
         <div className="absolute top-2 left-2 z-50 flex items-center gap-2">
           {onBackToHome && (
@@ -255,7 +255,7 @@ export default function Game({
         )}
 
         {/* Current viewing player area */}
-        <div className={`flex-shrink-0 border-t backdrop-blur-sm
+        <div className={`border-t backdrop-blur-sm
           ${mode === 'online' && isMyTurn
             ? 'border-yellow-400/30 bg-black/30'
             : 'border-white/10 bg-black/30'

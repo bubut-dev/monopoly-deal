@@ -43,6 +43,8 @@ export function getThemedCardDisplay(card: {
   description: string;
   icon: string;
   valueDisplay: string;
+  subtitle: string;
+  regionLabel: string;
 } {
   // Extract the card ID prefix (everything before the dash-number suffix)
   const idPrefix = card.id.replace(/-\d+$/, '');
@@ -52,6 +54,8 @@ export function getThemedCardDisplay(card: {
 
   let label = card.label || card.name;
   let description = card.description || '';
+  let subtitle = '';
+  let regionLabel = '';
 
   if (overrides) {
     if (overrides.label) label = overrides.label;
@@ -62,6 +66,18 @@ export function getThemedCardDisplay(card: {
   if (card.category === 'money') {
     label = theme.moneyLabel(card.value);
     description = 'Money';
+  }
+
+  // Single-color property cards — look up by card name in theme's cardNames
+  if (card.category === 'property' && card.colors.length === 1 && card.colors[0] !== 'multicolor') {
+    const color = card.colors[0];
+    const namedCard = theme.cardNames[card.name];
+    if (namedCard) {
+      label = namedCard.label;
+      subtitle = namedCard.subtitle || '';
+    }
+    // Region label from theme
+    regionLabel = theme.regionLabels[color] || '';
   }
 
   // Wildcard properties
@@ -105,5 +121,5 @@ export function getThemedCardDisplay(card: {
     valueDisplay = `${theme.currencyPrefix}${card.value}${theme.currencySuffix}`;
   }
 
-  return { label, description, icon, valueDisplay };
+  return { label, description, icon, valueDisplay, subtitle, regionLabel };
 }

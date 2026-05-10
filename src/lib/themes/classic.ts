@@ -9,6 +9,18 @@ export const classicTheme: Theme = {
   currencyPrefix: '$',
   currencySuffix: 'M',
   colorLabels: {},
+  regionLabels: {
+    brown: 'BROWN',
+    lightblue: 'LIGHT BLUE',
+    pink: 'PINK',
+    orange: 'ORANGE',
+    red: 'RED',
+    yellow: 'YELLOW',
+    green: 'GREEN',
+    darkblue: 'DARK BLUE',
+    railroad: 'RAILROAD',
+    utility: 'UTILITY',
+  },
   propertyIcon: '🏠',
   propertyIcons: {
     railroad: '🚂',
@@ -38,6 +50,55 @@ export const classicTheme: Theme = {
     'a-dtr': { label: 'Double\nthe Rent', description: 'Double your next rent charge' },
     'a-house': { label: 'House', description: 'Add to a complete set: +3M rent' },
     'a-hotel': { label: 'Hotel', description: 'Add to set with house: +4M more rent' },
+  },
+  cardNames: {
+    // === Brown ===
+    'Mediterranean Ave': { label: 'Mediterranean\nAve' },
+    'Baltic Ave': { label: 'Baltic\nAve' },
+
+    // === Light Blue ===
+    'Oriental Ave': { label: 'Oriental\nAve' },
+    'Vermont Ave': { label: 'Vermont\nAve' },
+    'Connecticut Ave': { label: 'Connecticut\nAve' },
+
+    // === Pink ===
+    'St. Charles Place': { label: 'St. Charles\nPlace' },
+    'States Ave': { label: 'States\nAve' },
+    'Virginia Ave': { label: 'Virginia\nAve' },
+
+    // === Orange ===
+    'St. James Place': { label: 'St. James\nPlace' },
+    'Tennessee Ave': { label: 'Tennessee\nAve' },
+    'New York Ave': { label: 'New York\nAve' },
+
+    // === Red ===
+    'Kentucky Ave': { label: 'Kentucky\nAve' },
+    'Indiana Ave': { label: 'Indiana\nAve' },
+    'Illinois Ave': { label: 'Illinois\nAve' },
+
+    // === Yellow ===
+    'Atlantic Ave': { label: 'Atlantic\nAve' },
+    'Ventnor Ave': { label: 'Ventnor\nAve' },
+    'Marvin Gardens': { label: 'Marvin\nGardens' },
+
+    // === Green ===
+    'Pacific Ave': { label: 'Pacific\nAve' },
+    'North Carolina Ave': { label: 'N. Carolina\nAve' },
+    'Pennsylvania Ave': { label: 'Pennsylvania\nAve' },
+
+    // === Dark Blue ===
+    'Park Place': { label: 'Park\nPlace' },
+    'Boardwalk': { label: 'Boardwalk' },
+
+    // === Railroad ===
+    'Reading Railroad': { label: 'Reading\nRailroad' },
+    'Pennsylvania Railroad': { label: 'Pennsylvania\nRailroad' },
+    'B&O Railroad': { label: 'B&O\nRailroad' },
+    'Short Line': { label: 'Short\nLine' },
+
+    // === Utility ===
+    'Electric Company': { label: 'Electric\nCompany' },
+    'Water Works': { label: 'Water\nWorks' },
   },
   moneyLabel: (value: number) => `$${value}M`,
   wildcardLabel: (colors: PropertyColor[]) => {

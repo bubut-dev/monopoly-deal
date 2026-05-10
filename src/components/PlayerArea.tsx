@@ -63,7 +63,7 @@ export default function PlayerArea({
           <div className="flex items-center gap-1">
             <span className="text-emerald-400">💰</span>
             <span className={`font-bold text-emerald-300 ${compact ? 'text-xs' : 'text-sm'}`}>
-              ${bankValue}M
+              {theme.currencyPrefix}{bankValue}{theme.currencySuffix}
             </span>
           </div>
 

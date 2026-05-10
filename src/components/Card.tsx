@@ -89,6 +89,9 @@ export default function Card({
   const gradient = getCardStyle(card);
   const themed = getThemedCardDisplay(card, theme);
 
+  // Determine if this is a single-color property card (not wildcard)
+  const isSingleProperty = card.category === 'property' && card.colors.length === 1 && card.colors[0] !== 'multicolor';
+
   return (
     <button
       onClick={onClick}
@@ -109,11 +112,25 @@ export default function Card({
       </div>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center px-0.5">
+      <div className="flex-1 flex flex-col items-center justify-center text-center px-0.5 w-full">
+        {/* Region label for single-color property cards */}
+        {isSingleProperty && themed.regionLabel && !small && (
+          <div className="text-[6px] sm:text-[7px] font-bold text-white/60 uppercase tracking-widest mb-0.5">
+            {themed.regionLabel}
+          </div>
+        )}
+
         {/* Card name / label (themed) */}
         <div className={`${small ? 'text-[7px]' : 'text-[10px] sm:text-xs'} font-bold text-white leading-tight whitespace-pre-line drop-shadow-md`}>
           {themed.label}
         </div>
+
+        {/* Subtitle for property cards (archetype) */}
+        {isSingleProperty && themed.subtitle && !small && (
+          <div className="text-[7px] sm:text-[8px] text-white/70 italic leading-tight mt-0.5">
+            {themed.subtitle}
+          </div>
+        )}
 
         {/* Value display (themed currency) */}
         {themed.valueDisplay && (
@@ -138,7 +155,7 @@ export default function Card({
 
         {/* Property icon for standard properties (themed) */}
         {card.category === 'property' && card.colors.length === 1 && card.colors[0] !== 'multicolor' && (
-          <div className={`${small ? 'text-sm' : 'text-xl'} drop-shadow-lg`}>
+          <div className={`${small ? 'text-sm' : 'text-lg'} drop-shadow-lg ${themed.subtitle && !small ? 'mt-0.5' : ''}`}>
             {themed.icon}
           </div>
         )}

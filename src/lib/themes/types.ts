@@ -10,6 +10,11 @@ export interface ThemeCardOverrides {
   icon?: string;
 }
 
+export interface ThemePropertyCard {
+  label: string;       // Display name on the card (may contain \n for line breaks)
+  subtitle?: string;   // Archetype subtitle shown below (e.g., "Pro Surfer")
+}
+
 export interface ThemeColorOverride {
   label: string; // e.g., 'Railroad' → 'Clubs'
 }
@@ -24,6 +29,8 @@ export interface Theme {
   currencySuffix: string;
   // Override labels for color categories (railroad → clubs, utility → sports)
   colorLabels: Partial<Record<PropertyColor, string>>;
+  // Region labels for property groups (e.g., brown → "ULUWATU")
+  regionLabels: Partial<Record<PropertyColor, string>>;
   // Property icon (for single-color property cards)
   propertyIcon: string;
   // Specific property icons per color
@@ -34,6 +41,8 @@ export interface Theme {
   actionIcons: Partial<Record<string, string>>;
   // Card-specific overrides keyed by card ID prefix
   cardOverrides: Record<string, ThemeCardOverrides>;
+  // Per-card-name display for property cards: maps card.name → themed display
+  cardNames: Record<string, ThemePropertyCard>;
   // Money card label format: (value: number) => string
   moneyLabel: (value: number) => string;
   // Wildcard description format: (colors: PropertyColor[]) => string

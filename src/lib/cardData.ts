@@ -43,58 +43,75 @@ const moneyCards: CardDef[] = [
 
 // ============================================
 // PROPERTY CARDS (28 cards, 10 color sets)
+// Each card has a unique name used for theme lookups
 // ============================================
 const propertyCards: CardDef[] = [
   // Brown (2)
-  ...Array(2).fill(null).map(() => ({
-    id: cid('p-brown'), category: 'property' as const, name: 'Brown Property',
-    value: 0, colors: ['brown' as PropertyColor], label: 'Brown', description: 'Property',
-  })),
+  { id: cid('p-brown'), category: 'property' as const, name: 'Mediterranean Ave',
+    value: 0, colors: ['brown' as PropertyColor], label: 'Brown', description: 'Property' },
+  { id: cid('p-brown'), category: 'property' as const, name: 'Baltic Ave',
+    value: 0, colors: ['brown' as PropertyColor], label: 'Brown', description: 'Property' },
   // Light Blue (3)
-  ...Array(3).fill(null).map(() => ({
-    id: cid('p-lb'), category: 'property' as const, name: 'Light Blue Property',
-    value: 0, colors: ['lightblue' as PropertyColor], label: 'Lt Blue', description: 'Property',
-  })),
+  { id: cid('p-lb'), category: 'property' as const, name: 'Oriental Ave',
+    value: 0, colors: ['lightblue' as PropertyColor], label: 'Lt Blue', description: 'Property' },
+  { id: cid('p-lb'), category: 'property' as const, name: 'Vermont Ave',
+    value: 0, colors: ['lightblue' as PropertyColor], label: 'Lt Blue', description: 'Property' },
+  { id: cid('p-lb'), category: 'property' as const, name: 'Connecticut Ave',
+    value: 0, colors: ['lightblue' as PropertyColor], label: 'Lt Blue', description: 'Property' },
   // Pink (3)
-  ...Array(3).fill(null).map(() => ({
-    id: cid('p-pink'), category: 'property' as const, name: 'Pink Property',
-    value: 0, colors: ['pink' as PropertyColor], label: 'Pink', description: 'Property',
-  })),
+  { id: cid('p-pink'), category: 'property' as const, name: 'St. Charles Place',
+    value: 0, colors: ['pink' as PropertyColor], label: 'Pink', description: 'Property' },
+  { id: cid('p-pink'), category: 'property' as const, name: 'States Ave',
+    value: 0, colors: ['pink' as PropertyColor], label: 'Pink', description: 'Property' },
+  { id: cid('p-pink'), category: 'property' as const, name: 'Virginia Ave',
+    value: 0, colors: ['pink' as PropertyColor], label: 'Pink', description: 'Property' },
   // Orange (3)
-  ...Array(3).fill(null).map(() => ({
-    id: cid('p-ora'), category: 'property' as const, name: 'Orange Property',
-    value: 0, colors: ['orange' as PropertyColor], label: 'Orange', description: 'Property',
-  })),
+  { id: cid('p-ora'), category: 'property' as const, name: 'St. James Place',
+    value: 0, colors: ['orange' as PropertyColor], label: 'Orange', description: 'Property' },
+  { id: cid('p-ora'), category: 'property' as const, name: 'Tennessee Ave',
+    value: 0, colors: ['orange' as PropertyColor], label: 'Orange', description: 'Property' },
+  { id: cid('p-ora'), category: 'property' as const, name: 'New York Ave',
+    value: 0, colors: ['orange' as PropertyColor], label: 'Orange', description: 'Property' },
   // Red (3)
-  ...Array(3).fill(null).map(() => ({
-    id: cid('p-red'), category: 'property' as const, name: 'Red Property',
-    value: 0, colors: ['red' as PropertyColor], label: 'Red', description: 'Property',
-  })),
+  { id: cid('p-red'), category: 'property' as const, name: 'Kentucky Ave',
+    value: 0, colors: ['red' as PropertyColor], label: 'Red', description: 'Property' },
+  { id: cid('p-red'), category: 'property' as const, name: 'Indiana Ave',
+    value: 0, colors: ['red' as PropertyColor], label: 'Red', description: 'Property' },
+  { id: cid('p-red'), category: 'property' as const, name: 'Illinois Ave',
+    value: 0, colors: ['red' as PropertyColor], label: 'Red', description: 'Property' },
   // Yellow (3)
-  ...Array(3).fill(null).map(() => ({
-    id: cid('p-yel'), category: 'property' as const, name: 'Yellow Property',
-    value: 0, colors: ['yellow' as PropertyColor], label: 'Yellow', description: 'Property',
-  })),
+  { id: cid('p-yel'), category: 'property' as const, name: 'Atlantic Ave',
+    value: 0, colors: ['yellow' as PropertyColor], label: 'Yellow', description: 'Property' },
+  { id: cid('p-yel'), category: 'property' as const, name: 'Ventnor Ave',
+    value: 0, colors: ['yellow' as PropertyColor], label: 'Yellow', description: 'Property' },
+  { id: cid('p-yel'), category: 'property' as const, name: 'Marvin Gardens',
+    value: 0, colors: ['yellow' as PropertyColor], label: 'Yellow', description: 'Property' },
   // Green (3)
-  ...Array(3).fill(null).map(() => ({
-    id: cid('p-grn'), category: 'property' as const, name: 'Green Property',
-    value: 0, colors: ['green' as PropertyColor], label: 'Green', description: 'Property',
-  })),
+  { id: cid('p-grn'), category: 'property' as const, name: 'Pacific Ave',
+    value: 0, colors: ['green' as PropertyColor], label: 'Green', description: 'Property' },
+  { id: cid('p-grn'), category: 'property' as const, name: 'North Carolina Ave',
+    value: 0, colors: ['green' as PropertyColor], label: 'Green', description: 'Property' },
+  { id: cid('p-grn'), category: 'property' as const, name: 'Pennsylvania Ave',
+    value: 0, colors: ['green' as PropertyColor], label: 'Green', description: 'Property' },
   // Dark Blue (2)
-  ...Array(2).fill(null).map(() => ({
-    id: cid('p-db'), category: 'property' as const, name: 'Dark Blue Property',
-    value: 0, colors: ['darkblue' as PropertyColor], label: 'Dk Blue', description: 'Property',
-  })),
+  { id: cid('p-db'), category: 'property' as const, name: 'Park Place',
+    value: 0, colors: ['darkblue' as PropertyColor], label: 'Dk Blue', description: 'Property' },
+  { id: cid('p-db'), category: 'property' as const, name: 'Boardwalk',
+    value: 0, colors: ['darkblue' as PropertyColor], label: 'Dk Blue', description: 'Property' },
   // Railroad (4)
-  ...Array(4).fill(null).map(() => ({
-    id: cid('p-rr'), category: 'property' as const, name: 'Railroad',
-    value: 0, colors: ['railroad' as PropertyColor], label: 'Railroad', description: 'Property',
-  })),
+  { id: cid('p-rr'), category: 'property' as const, name: 'Reading Railroad',
+    value: 0, colors: ['railroad' as PropertyColor], label: 'Railroad', description: 'Property' },
+  { id: cid('p-rr'), category: 'property' as const, name: 'Pennsylvania Railroad',
+    value: 0, colors: ['railroad' as PropertyColor], label: 'Railroad', description: 'Property' },
+  { id: cid('p-rr'), category: 'property' as const, name: 'B&O Railroad',
+    value: 0, colors: ['railroad' as PropertyColor], label: 'Railroad', description: 'Property' },
+  { id: cid('p-rr'), category: 'property' as const, name: 'Short Line',
+    value: 0, colors: ['railroad' as PropertyColor], label: 'Railroad', description: 'Property' },
   // Utility (2)
-  ...Array(2).fill(null).map(() => ({
-    id: cid('p-util'), category: 'property' as const, name: 'Utility',
-    value: 0, colors: ['utility' as PropertyColor], label: 'Utility', description: 'Property',
-  })),
+  { id: cid('p-util'), category: 'property' as const, name: 'Electric Company',
+    value: 0, colors: ['utility' as PropertyColor], label: 'Utility', description: 'Property' },
+  { id: cid('p-util'), category: 'property' as const, name: 'Water Works',
+    value: 0, colors: ['utility' as PropertyColor], label: 'Utility', description: 'Property' },
 ];
 
 // ============================================
