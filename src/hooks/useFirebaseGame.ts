@@ -25,18 +25,8 @@ export function useFirebaseGame({
 }: UseFirebaseGameOptions) {
   const [state, setState] = useState<GameState>(initialState);
   const [isSyncing, setIsSyncing] = useState(false);
-  const localPlayerIndex = useRef<number>(0);
+  const [myPlayerIndex, setMyPlayerIndex] = useState<number | null>(null);
   const isWritingRef = useRef(false);
-
-  // Map playerId to player index
-  const getPlayerIndex = useCallback(
-    (s: GameState): number => {
-      // In multiplayer, we need to figure out which player index we are
-      // The players array is ordered by join order
-      return localPlayerIndex.current;
-    },
-    []
-  );
 
   // Listen to game state from Firebase
   useEffect(() => {
@@ -76,7 +66,7 @@ export function useFirebaseGame({
       if (Array.isArray(safeState.playerClientIds) && safeState.playerClientIds.length > 0) {
         const mappedIdx = safeState.playerClientIds.indexOf(playerId);
         if (mappedIdx >= 0) {
-          localPlayerIndex.current = mappedIdx;
+          setMyPlayerIndex(mappedIdx);
           return;
         }
       }
@@ -86,7 +76,7 @@ export function useFirebaseGame({
         (p) => p.name === playerName || p.id.toString() === playerId
       );
       if (idx >= 0) {
-        localPlayerIndex.current = idx;
+        setMyPlayerIndex(idx);
       }
     });
 
@@ -120,7 +110,7 @@ export function useFirebaseGame({
   );
 
   // Only allow actions when it's this player's turn
-  const isMyTurn = state.currentPlayerIndex === localPlayerIndex.current;
+  const isMyTurn = myPlayerIndex !== null && state.currentPlayerIndex === myPlayerIndex;
 
   const startGame = useCallback(
     (playerCount: number, playerNames?: string[], playerClientIds?: string[]) => {
@@ -155,7 +145,7 @@ export function useFirebaseGame({
           idx = newState.players.findIndex((p) => p.name === playerName);
         }
         if (idx >= 0) {
-          localPlayerIndex.current = idx;
+          setMyPlayerIndex(idx);
         }
 
         setState(newState);
@@ -218,7 +208,7 @@ export function useFirebaseGame({
   return {
     state,
     isMyTurn,
-    myPlayerIndex: localPlayerIndex.current,
+    myPlayerIndex: myPlayerIndex ?? 0,
     startGame,
     drawCards,
     playCard,
