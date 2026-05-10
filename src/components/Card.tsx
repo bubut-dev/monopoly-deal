@@ -74,7 +74,7 @@ export default function Card({
         className={`
           relative rounded-lg border-2 border-white/20 bg-gradient-to-br from-blue-900 to-blue-950
           flex items-center justify-center shadow-lg
-          ${small ? 'w-12 h-16' : 'w-20 h-28 sm:w-24 sm:h-34'}
+          ${small ? 'w-10 h-14' : 'w-16 h-22 sm:w-20 sm:h-28'}
           transition-transform hover:scale-105
         `}
       >
@@ -99,7 +99,7 @@ export default function Card({
         relative rounded-lg border-2 bg-gradient-to-br ${gradient}
         flex flex-col items-center justify-between p-1
         shadow-lg transition-all duration-200
-        ${small ? 'w-12 h-16 min-w-[3rem]' : 'w-20 h-28 min-w-[5rem] sm:w-24 sm:h-34 sm:min-w-[6rem]'}
+        ${small ? 'w-10 h-14 min-w-[2.5rem]' : 'w-16 h-22 min-w-[4rem] sm:w-20 sm:h-28 sm:min-w-[5rem]'}
         ${onClick ? 'cursor-pointer hover:scale-105 hover:-translate-y-1 hover:shadow-xl' : 'cursor-default'}
         ${selected ? 'ring-2 ring-yellow-400 ring-offset-2 ring-offset-transparent -translate-y-2 shadow-yellow-400/30 shadow-lg' : ''}
         ${highlight ? 'ring-2 ring-white/60 animate-pulse-glow' : ''}

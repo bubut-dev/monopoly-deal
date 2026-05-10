@@ -28,7 +28,7 @@ export default function PlayerHand({
   }
 
   return (
-    <div className="flex flex-wrap justify-center gap-1 sm:gap-2 px-2">
+    <div className="flex flex-wrap justify-center gap-1 px-1">
       {cards.map((card) => (
         <CardComponent
           key={card.instanceId}

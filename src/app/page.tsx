@@ -131,7 +131,7 @@ export default function Home() {
   // Home Screen
   if (screen === 'home') {
     return (
-      <main className="h-screen w-screen overflow-hidden">
+      <main className="w-screen min-h-screen">
         <div className="flex flex-col items-center justify-center min-h-[70vh] animate-fade-in px-4">
           {/* Logo */}
           <div className="mb-8 text-center">
@@ -256,7 +256,7 @@ export default function Home() {
   // Local Game Setup / Game
   if (screen === 'local-setup' || screen === 'local-game') {
     return (
-      <main className="h-screen w-screen overflow-hidden">
+      <main className="w-screen min-h-screen">
         <Game
           state={localGame.state}
           onDrawCards={localGame.drawCards}
@@ -278,7 +278,7 @@ export default function Home() {
   // Lobby
   if (screen === 'lobby') {
     return (
-      <main className="h-screen w-screen overflow-hidden">
+      <main className="w-screen min-h-screen">
         <Lobby
           roomCode={roomCode}
           playerId={playerId}
@@ -295,7 +295,7 @@ export default function Home() {
   // Online Game
   if (screen === 'online-game') {
     return (
-      <main className="h-screen w-screen overflow-hidden">
+      <main className="w-screen min-h-screen">
         <Game
           state={firebaseGame.state}
           onDrawCards={firebaseGame.drawCards}
