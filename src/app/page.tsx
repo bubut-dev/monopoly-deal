@@ -107,10 +107,10 @@ export default function Home() {
   const handleStartOnlineGame = useCallback(async () => {
     if (!roomData) return;
 
-    const connectedPlayers = Object.entries(roomData.players)
-      .filter(([, p]) => p.connected);
+    const connectedPlayers = Object.entries(roomData.players || {})
+      .filter(([, p]) => Boolean(p?.connected));
     const connectedCount = connectedPlayers.length;
-    const readyCount = connectedPlayers.filter(([, p]) => p.ready).length;
+    const readyCount = connectedPlayers.filter(([, p]) => Boolean(p?.ready)).length;
     const isHost = roomData.host === playerId;
 
     // Defensive guard: only host can start, with 2-4 connected players, all ready.

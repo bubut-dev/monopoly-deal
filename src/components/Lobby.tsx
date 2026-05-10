@@ -25,9 +25,9 @@ export default function Lobby({
   const [copied, setCopied] = useState(false);
   const isHost = roomData?.host === playerId;
 
-  const players = roomData ? Object.entries(roomData.players) : [];
-  const connectedCount = players.filter(([, p]) => p.connected).length;
-  const readyCount = players.filter(([, p]) => p.ready && p.connected).length;
+  const players = roomData ? Object.entries(roomData.players || {}) : [];
+  const connectedCount = players.filter(([, p]) => Boolean(p?.connected)).length;
+  const readyCount = players.filter(([, p]) => Boolean(p?.connected && p?.ready)).length;
   const canStart = connectedCount >= 2 && connectedCount <= 4 && readyCount === connectedCount && isHost;
 
   const handleCopyCode = async () => {
@@ -72,6 +72,7 @@ export default function Lobby({
 
         <div className="space-y-2">
           {players.map(([id, player]) => {
+            if (!player) return null;
             const isMe = id === playerId;
             const isHostPlayer = roomData?.host === id;
             return (
