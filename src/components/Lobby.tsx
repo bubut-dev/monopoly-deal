@@ -28,7 +28,7 @@ export default function Lobby({
   const players = roomData ? Object.entries(roomData.players) : [];
   const connectedCount = players.filter(([, p]) => p.connected).length;
   const readyCount = players.filter(([, p]) => p.ready && p.connected).length;
-  const canStart = connectedCount >= 2 && readyCount === connectedCount && isHost;
+  const canStart = connectedCount >= 2 && connectedCount <= 4 && readyCount === connectedCount && isHost;
 
   const handleCopyCode = async () => {
     try {

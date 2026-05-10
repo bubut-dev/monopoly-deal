@@ -15,6 +15,21 @@ import {
   RoomData,
 } from '../lib/firebaseRooms';
 
+const PLAYER_ID_STORAGE_KEY = 'monopolyDealPlayerId';
+
+function getStablePlayerId(): string {
+  if (typeof window === 'undefined') {
+    return generatePlayerId();
+  }
+
+  const existing = window.localStorage.getItem(PLAYER_ID_STORAGE_KEY);
+  if (existing) return existing;
+
+  const created = generatePlayerId();
+  window.localStorage.setItem(PLAYER_ID_STORAGE_KEY, created);
+  return created;
+}
+
 type Screen = 'home' | 'local-setup' | 'local-game' | 'lobby' | 'online-game';
 
 export default function Home() {
@@ -22,7 +37,7 @@ export default function Home() {
   const [playerName, setPlayerName] = useState('');
   const [roomCode, setRoomCode] = useState('');
   const [joinCode, setJoinCode] = useState('');
-  const [playerId] = useState(() => generatePlayerId());
+  const [playerId] = useState(() => getStablePlayerId());
   const [roomData, setRoomData] = useState<RoomData | null>(null);
   const [error, setError] = useState('');
   const [theme, setTheme] = useState<ThemeId>('classic');
@@ -91,11 +106,21 @@ export default function Home() {
   // Handle start game (host)
   const handleStartOnlineGame = useCallback(async () => {
     if (!roomData) return;
-    const playerNames = Object.values(roomData.players)
-      .filter((p) => p.connected)
-      .map((p) => p.name);
+
+    const connectedPlayers = Object.entries(roomData.players)
+      .filter(([, p]) => p.connected);
+    const connectedCount = connectedPlayers.length;
+    const readyCount = connectedPlayers.filter(([, p]) => p.ready).length;
+    const isHost = roomData.host === playerId;
+
+    // Defensive guard: only host can start, with 2-4 connected players, all ready.
+    if (!isHost || connectedCount < 2 || connectedCount > 4 || readyCount !== connectedCount) {
+      return;
+    }
+
+    const playerNames = connectedPlayers.map(([, p]) => p.name);
     firebaseGame.startGame(playerNames.length, playerNames);
-  }, [roomData, firebaseGame]);
+  }, [roomData, playerId, firebaseGame]);
 
   // Handle leave room
   const handleLeaveRoom = useCallback(async () => {
