@@ -134,9 +134,10 @@ export async function joinRoom(
   // Can't join if game is in progress or finished
   if (roomData.status !== 'lobby') return false;
 
-  // Check max players
-  const playerCount = Object.keys(roomData.players).length;
-  if (playerCount >= 4) return false;
+  // Check max players (connected players only)
+  // Prevent stale disconnected entries from blocking new joins.
+  const connectedPlayerCount = Object.values(roomData.players).filter((p) => p.connected).length;
+  if (connectedPlayerCount >= 4) return false;
 
   // Add player to room
   const playerData: RoomPlayer = {

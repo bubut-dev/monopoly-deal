@@ -106,11 +106,6 @@ export default function Card({
         animate-deal-in
       `}
     >
-      {/* Category badge */}
-      <div className={`absolute top-0.5 right-0.5 px-1 rounded text-[6px] font-bold uppercase tracking-wider ${getCategoryBadge(card.category)}`}>
-        {card.category}
-      </div>
-
       {/* Main content */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-0.5 w-full">
         {/* Region label for single-color property cards */}
@@ -178,8 +173,13 @@ export default function Card({
         )}
       </div>
 
-      {/* Bottom accent */}
-      <div className={`w-full h-0.5 rounded-full bg-white/20 mt-0.5`} />
+      {/* Bottom accent + category */}
+      <div className="w-full flex flex-col items-center">
+        <div className={`px-1.5 py-px rounded text-[6px] font-bold uppercase tracking-wider ${getCategoryBadge(card.category)}`}>
+          {card.category}
+        </div>
+        <div className="w-full h-0.5 rounded-full bg-white/20 mt-0.5" />
+      </div>
     </button>
   );
 }

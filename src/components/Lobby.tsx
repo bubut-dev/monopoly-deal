@@ -67,7 +67,7 @@ export default function Lobby({
       {/* Players List */}
       <div className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-6 w-full max-w-md mb-6">
         <h2 className="text-white/60 text-sm font-semibold uppercase tracking-wider mb-4 text-center">
-          Players ({connectedCount}/4)
+          Players Connected: {connectedCount} <span className="text-white/35 normal-case">(2–4 to start)</span>
         </h2>
 
         <div className="space-y-2">
